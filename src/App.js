@@ -25,20 +25,23 @@ function App() {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
+    // Subscribe to auth state changes
     const unsubscribe = auth.onAuthStateChanged((user) => {
-      setUser(user);
+      setUser(user); // Update user state when auth state changes
     });
 
+    // Unsubscribe from auth state changes when component unmounts
     return () => unsubscribe();
   }, []);
 
   return (
     <Router>
       <div className="App">
-        {user ? (
+        {user ? ( // If user is authenticated
           <div className="auth-wrapper">
             <div className="auth-inner">
               <Routes>
+                {/* Redirect to dashboard for these paths if authenticated */}
                 <Route path="/" element={<Navigate to="/dashboard" />} />
                 <Route path="/login" element={<Navigate to="/dashboard" />} />
                 <Route path="/signup" element={<Navigate to="/dashboard" />} />
@@ -52,8 +55,9 @@ function App() {
               <ToastContainer />
             </div>
           </div>
-        ) : (
+        ) : ( // If user is not authenticated
           <Routes>
+            {/* Render login or signup based on path */}
             <Route path="/" element={<Login />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<SignUp />} />

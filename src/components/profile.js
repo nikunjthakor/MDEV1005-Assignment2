@@ -3,6 +3,7 @@ import { auth, db } from './firebase';
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
 
 function Profile() {
+  // State variables for user details, editing mode, and loading state
   const [userDetails, setUserDetails] = useState({
     firstName: '',
     lastName: '',
@@ -12,6 +13,7 @@ function Profile() {
   const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(true);
 
+  // Function to fetch user data from Firestore
   const fetchUserData = async (user) => {
     const docRef = doc(db, "Users", user.uid);
     const docSnap = await getDoc(docRef);
@@ -24,6 +26,7 @@ function Profile() {
     }
   };
 
+  // UseEffect to monitor authentication state changes
   useEffect(() => {
     auth.onAuthStateChanged((user) => {
       if (user) {
@@ -35,20 +38,23 @@ function Profile() {
     });
   }, []);
 
+  // Handle input changes for form fields
   const handleChange = (e) => {
     const { name, value } = e.target;
     setUserDetails({ ...userDetails, [name]: value });
   };
 
+  // Handle save action to update user details in Firestore
   const handleSave = async () => {
     const user = auth.currentUser;
     if (user) {
       const docRef = doc(db, "Users", user.uid);
       await updateDoc(docRef, userDetails);
-      setIsEditing(false);
+      setIsEditing(false); // Exit editing mode after saving
     }
   };
 
+  // Display loading message if data is being fetched
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -60,6 +66,7 @@ function Profile() {
       <div className="card">
         <div className="card-body">
           <form>
+            {/* First Name Field */}
             <div className="form-group">
               <label>First Name</label>
               <input
@@ -68,9 +75,10 @@ function Profile() {
                 name="firstName"
                 value={userDetails.firstName}
                 onChange={handleChange}
-                disabled={!isEditing}
+                disabled={!isEditing} // Disable input if not editing
               />
             </div>
+            {/* Last Name Field */}
             <div className="form-group">
               <label>Last Name</label>
               <input
@@ -79,9 +87,10 @@ function Profile() {
                 name="lastName"
                 value={userDetails.lastName}
                 onChange={handleChange}
-                disabled={!isEditing}
+                disabled={!isEditing} // Disable input if not editing
               />
             </div>
+            {/* Email Field */}
             <div className="form-group">
               <label>Email</label>
               <input
@@ -90,9 +99,10 @@ function Profile() {
                 name="email"
                 value={userDetails.email}
                 onChange={handleChange}
-                disabled
+                disabled // Always disable email input
               />
             </div>
+            {/* Save and Edit Buttons */}
             {isEditing ? (
               <button type="button" className="btn btn-success mt-3" onClick={handleSave}>
                 Save

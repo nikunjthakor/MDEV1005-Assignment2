@@ -16,6 +16,7 @@ function Dashboard() {
   });
   const [activeTab, setActiveTab] = useState('profile');
 
+  // Fetch user data from Firebase Firestore
   const fetchUserData = async () => {
     auth.onAuthStateChanged(async (user) => {
       if (user) {
@@ -36,6 +37,7 @@ function Dashboard() {
     fetchUserData();
   }, []);
 
+  // Handle user logout
   async function handleLogout() {
     try {
       await auth.signOut();
@@ -45,6 +47,7 @@ function Dashboard() {
     }
   }
 
+  // Render the content based on the active tab
   const renderContent = () => {
     if (!userDetails) {
       return <div>Loading...</div>;
@@ -54,20 +57,18 @@ function Dashboard() {
       case 'profile':
         return (
           <div className="text-center">
-            
             <h3>Profile Detail</h3>
             <div>
               <p>Email: {userDetails.email}</p>
               <p>First Name: {userDetails.firstName}</p>
               <p>Last Name: {userDetails.lastName}</p>
             </div>
-            
           </div>
         );
       case 'userlist':
         return <UserList />;
-        case 'calendar':
-          return <CalendarPage />;
+      case 'calendar':
+        return <CalendarPage />;
       case 'calculator':
         return <Calculator />;
       case 'checklist':
@@ -99,46 +100,39 @@ function Dashboard() {
           <a className="navbar-brand ps-3" href="/calculator">Calculator</a>
           <a className="navbar-brand ps-3" href="/Userlist">Userlist</a>
           <a className="navbar-brand ps-3" href="/weather">Weather</a>
-          <button className="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i className="fas fa-bars"></i></button>
-          <form className="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">
-            <div className="input-group">
-            </div>
-          </form>
+          <button className="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!">
+            <i className="fas fa-bars"></i>
+          </button>
           <ul className="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
             <li className="nav-item dropdown">
               <a className="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                 <i className="fas fa-user fa-fw"></i>
                 {userDetails && <span className="small"> Logged in as: {userDetails.firstName}</span>}
               </a>
-              
             </li>
           </ul>
           <button className="btn btn-primary mt-3" onClick={handleLogout}>
-                      Logout
-                    </button>
+            Logout
+          </button>
         </nav>
         <div id="layoutSidenav">
           <div id="layoutSidenav_nav">
             <nav className="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
               <div className="sb-sidenav-menu"></div>
-              <div className="sb-sidenav-footer">
-              </div>
+              <div className="sb-sidenav-footer"></div>
             </nav>
           </div>
           <div id="layoutSidenav_content">
             <main>
               <div className="container-fluid px-4">
-                  <div className="text-center">
-            
-                    <h1>Welcome, {userDetails.firstName} 🙏🙏</h1>
-                    
-                  </div>
-                
+                <div className="text-center">
+                  <h1>Welcome, {userDetails.firstName} 🙏🙏</h1>
+                </div>
                 <ol className="breadcrumb mb-4">
                   <li className="breadcrumb-item active">Welcome to Dashboard</li>
                 </ol>
                 <div className="row">
-                <div className="col-xl-3 col-md-6">
+                  <div className="col-xl-3 col-md-6">
                     <div className="card bg-danger text-white mb-4">
                       <div className="card-body">Profile</div>
                       <div className="card-footer d-flex align-items-center justify-content-between">
@@ -189,16 +183,13 @@ function Dashboard() {
                 </div>
               </div>
             </main>
-          
           </div>
         </div>
         <div className="container-fluid">
           <div className="row">
-            
             <main role="main" className="col-md-9 ml-sm-auto col-lg-10 px-4">
               {renderContent()}
             </main>
-
             <footer className="py-4 bg-light mt-auto">
               <div className="container-fluid px-4">
                 <div className="d-flex align-items-center justify-content-between small">
